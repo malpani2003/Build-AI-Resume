@@ -1,6 +1,9 @@
 import React from "react";
 
 function LoginPopup({ changeModel }) {
+  const handleSignUp=()=>{
+     window.location.href = "http://localhost:3001/api/auth/gmail";
+  }
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50 z-50">
       <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-sm">
@@ -30,6 +33,7 @@ function LoginPopup({ changeModel }) {
         </p>
         <button
           type="button"
+          onClick={handleSignUp}
           className="w-full flex items-center justify-center mt-3 bg-white text-black p-3 rounded-lg hover:bg-[#1a1a2e] hover:text-white transition-colors duration-200"
         >
           <img
