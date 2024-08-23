@@ -1,8 +1,6 @@
 require("dotenv").config();
 const express = require("express");
-const session = require("express-session");
 const { google } = require("googleapis");
-const crypto = require("crypto");
 const bodyParser = require("body-parser");
 const cors = require("cors");
 
@@ -17,7 +15,7 @@ const ClientSecret = process.env.CLIENT_SECRET;
 const oauth2Client = new google.auth.OAuth2(
   ClientID,
   ClientSecret,
-  `http://localhost:3001/api/emails/gmail`
+  `http://localhost:3000/emails`
 );
 
 // Middleware
@@ -30,15 +28,7 @@ app.use(
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-app.use(
-  session({
-    secret:
-      process.env.SESSION_SECRET || crypto.randomBytes(64).toString("hex"),
-    resave: false,
-    saveUninitialized: true,
-    cookie: { secure: process.env.NODE_ENV === "production", httpOnly: true },
-  })
-);
+
 
 // Endpoint to get the Google OAuth authentication URL
 app.get("/api/auth/gmail", (req, res) => {
@@ -93,34 +83,15 @@ app.get("/api/emails/gmail", async (req, res) => {
   try {
     const { tokens: newTokens } = await oauth2Client.getToken(code);
     oauth2Client.setCredentials(newTokens);
-    req.session.tokens = newTokens; // Store tokens in session
-     
     // Fetch emails after successful authentication
     const emails = await fetchEmails(oauth2Client);
-    res.json(emails); // Send the fetched emails as response
+    res.json({emails,newTokens}); // Send the fetched emails as response
   } catch (error) {
     console.error("Error during authentication or fetching emails:", error);
-    res.status(500).send("Error during authentication or fetching emails");
+    res.status(500).send(error);
   }
 });
 
-// Endpoint to check if the user is authenticated and get emails
-app.get("/api/emails", async (req, res) => {
-  if (!req.session.tokens) {
-    return res.status(401).send("Not authenticated");
-  }
-
-  oauth2Client.setCredentials(req.session.tokens);
-
-  try {
-    // Fetch emails
-    const emails = await fetchEmails(oauth2Client);
-    res.json(emails); // Send the fetched emails as response
-  } catch (error) {
-    console.error("Error fetching emails:", error);
-    res.status(500).send("Error fetching emails");
-  }
-}); 
 
 app.listen(port, () => {
   console.log(`Server running at http://localhost:${port}`);

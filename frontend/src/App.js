@@ -27,6 +27,7 @@ function App() {
             </>
           }
         ></Route>
+        <Route exact path="/emails" element={<EmailList></EmailList>}></Route>
 
         <Route
           exact
