@@ -11,7 +11,7 @@ function Header() {
           an existing resume, we've got you covered.
         </p>
         <button className="bg-[#FCFAF9] border-2 border-[#FCFAF9] text-black p-3 font-semibold rounded-lg mt-5 transition duration-300 ease-in-out hover:bg-indigo-900 hover:text-white">
-          <Link to="/create-resume">Start Building Your Resume</Link>
+          <Link to="/dashboard">Start Building Your Resume</Link>
         </button>
       </div>
 

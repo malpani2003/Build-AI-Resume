@@ -29,7 +29,7 @@ function App() {
             </>
           }
         ></Route>
-        <Route exact path="/emails" element={<EmailList></EmailList>}></Route>
+        <Route exact path="/resume-full-screen" element={<EmailList></EmailList>}></Route>
 
         <Route
           exact
