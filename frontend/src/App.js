@@ -8,6 +8,8 @@ import { useState } from "react";
 import Response from "./components/ResponsePage/Response";
 import EmailList from "./components/EmailList";
 import { Route, Routes } from "react-router-dom";
+import UserDashboard from "./components/Dashboard/UserDashboard";
+import ResumeEdit from "./components/Resume/ResumeEdit";
 function App() {
   const [showLoginModel, setLoginModel] = useState(false);
   return (
@@ -31,9 +33,22 @@ function App() {
 
         <Route
           exact
-          path="/generate-reply"
+          path="/create-resume"
           element={<Response></Response>}
         ></Route>
+
+        <Route
+          exact
+          path="/dashboard"
+          element={<UserDashboard></UserDashboard>}
+        ></Route>
+
+        <Route
+          exact
+          path="/dashboard/resume/:resumeId/edit"
+          element={<ResumeEdit></ResumeEdit>}
+        ></Route>
+        <Route path="*" element={<div>404 - Page Not Found</div>} />
       </Routes>
       <Footer></Footer>
     </div>
