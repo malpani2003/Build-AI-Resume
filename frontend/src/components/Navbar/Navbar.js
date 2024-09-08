@@ -6,7 +6,7 @@ export default function Navbar({changeModel}) {
     return (
         <nav className='flex justify-between items-center bg-[#0d0c22] py-4 px-3 md:px-16 text-white drop-shadow-md'>
             <Link to='/' className='text-2xl font-bold'>
-                Email-AI
+                Resume-AI
             </Link>
             
             <div className='flex space-x-8'>

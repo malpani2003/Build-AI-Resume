@@ -2,37 +2,76 @@ import React, { useState, useEffect } from "react";
 import SkillsAddSection from "./skillsAddSection";
 import PersonalDetailsSection from "./PersonalDetails";
 import WorkExperienceSection from "./WorkExprienceSection"; // Renamed for consistency
+import EducationComponents from "./EducationComponents";
 
 const initialResumeData = {
   name: "John Doe",
   email: "john.doe@example.com",
-  title: "Full Stack Developer",
+  title: "Senior Full Stack Developer | Cloud Architect",
   phone: "+1-234-567-8901",
-  address: "123 Main St, Anytown, USA",
-  summary: "Versatile Full Stack Developer with 6 years of experience...",
+  address: "123 Main St, Silicon Valley, CA, USA",
+  summary: `
+    A results-driven Senior Full Stack Developer with 8+ years of experience building responsive web applications and interactive features that drive business growth. Proficient in JavaScript, React, Node.js, and AWS, with a proven track record of delivering high-quality cloud-native applications. Adept at leading cross-functional teams and mentoring junior developers. Passionate about learning new technologies and solving complex problems.
+  `,
   workExperience: [
-    "Software Developer at TechCorp from Jan 2018 to Present...",
+    "Led a team of 10 developers in the redesign and development of a scalable web application serving 1M+ users",
+    "Developed and maintained full-stack applications using React, Node.js, MongoDB, and AWS",
+  ],
+  projects: [
+    {
+      name: "E-Commerce Platform",
+      description: `
+        Developed a fully responsive, cloud-native e-commerce platform using React, Node.js, and AWS. Integrated Stripe for payment processing and optimized the platform for high traffic and fast load times, serving over 500k users globally.
+      `,
+    },
+    {
+      name: "Real-Time Collaboration Tool",
+      description: `
+        Led the development of a real-time collaboration tool using WebSockets, React, and Node.js. Enabled real-time document editing and file sharing, enhancing remote team collaboration across multiple time zones.
+      `,
+    },
   ],
   giturl: "https://github.com/johndoe",
   linkedlnURL: "https://www.linkedin.com/in/johndoe",
-  portfolio: "https://johndoe.com",
+  portfolio: "https://johndoe.dev",
   education: [
     {
       id: 1,
-      Year: "2020",
-      Degree: "BTech",
+      Year: "2018",
+      Degree: "B.Tech in Computer Science",
       Institute: "IIIT Kota",
-      CGPA: "8.88",
+      CGPA: "8.75",
     },
     {
       id: 2,
-      Year: "2026",
-      Degree: "MTech",
-      Institute: "IIIT Kota",
-      CGPA: "9.00",
+      Year: "2021",
+      Degree: "M.Tech in Software Engineering",
+      Institute: "IIIT Bangalore",
+      CGPA: "9.2",
     },
   ],
-  skills: ["JavaScript", "React", "Node.js", "CSS"],
+  certifications: [
+    "AWS Certified Solutions Architect",
+    "Certified Kubernetes Administrator",
+    "Google Cloud Professional DevOps Engineer",
+  ],
+  skills: [
+    "JavaScript",
+    "React",
+    "Node.js",
+    "AWS",
+    "Docker",
+    "Kubernetes",
+    "Microservices",
+    "CI/CD",
+    "REST APIs",
+    "MongoDB",
+    "SQL",
+    "GraphQL",
+    "TypeScript",
+  ],
+  languages: ["English (Fluent)", "Spanish (Intermediate)", "German (Basic)"],
+  interests: ["Open Source Contributions", "Blockchain", "AI/ML", "Traveling"],
 };
 
 const FormSection = ({ setOutput, theme }) => {
@@ -67,6 +106,7 @@ const FormSection = ({ setOutput, theme }) => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
+    console.log(name,value);
     setResumeData((prevData) => ({ ...prevData, [name]: value }));
   };
 
@@ -95,12 +135,12 @@ const FormSection = ({ setOutput, theme }) => {
       skills: newSkills,
     }));
   };
-
   const updateOutput = () => {
+    console.log(theme);
     const generatedResume = `
       <div>
-      <div class="bg-${theme}-500 h-2"></div>
-      <div class="flex flex-col bg-gray-100 shadow-lg max-w-3xl mx-auto p-4">
+      <div class="bg-${theme}-500 h-3 max-w-3xl"></div>
+      <div class="flex flex-col bg-gray-100 shadow-lg max-w-2xl mx-auto p-4">
         <section class="text-center mb-3">
           <p class="text-4xl font-bold text-gray-800 mb-2">${
             resumeData.name
@@ -125,13 +165,13 @@ const FormSection = ({ setOutput, theme }) => {
             }" class="text-blue-600" target="_blank" rel="noopener noreferrer">Portfolio</a>
           </p>
         </section>
-
-        <section class="mb-6">
+  
+        <section class="mb-4">
           <h2 class="text-2xl font-semibold text-${theme}-500 mb-2">Summary</h2>
-          <p class="text-gray-700 whitespace-pre-line">${resumeData.summary}</p>
+          <p class="text-gray-700 overflow-x break-all">${resumeData.summary}</p>
         </section>
       
-        <section class="mb-6">
+        <section class="mb-4">
           <h2 class="text-2xl font-semibold text-${theme}-500 mb-2">Education</h2>
           <table class="min-w-full bg-white">
             <thead>
@@ -157,8 +197,8 @@ const FormSection = ({ setOutput, theme }) => {
             </tbody>
           </table>
         </section>
-
-        <section class="mb-6">
+  
+        <section class="mb-4">
           <h2 class="text-2xl font-semibold text-${theme}-500 mb-2">Work Experience</h2>
           <ul class="list-disc pl-5 text-gray-700">
             ${resumeData.workExperience
@@ -167,23 +207,27 @@ const FormSection = ({ setOutput, theme }) => {
           </ul>
         </section>
       
-        <section class="mb-6">
+        <section class="mb-4">
           <h2 class="text-2xl font-semibold text-${theme}-500 mb-2">Skills</h2>
-          <ul class="list-disc pl-5 text-gray-700">
+          <div class="grid grid-cols-3 gap-3">
             ${resumeData.skills
-              .map(
-                (skill) => `
-                <li class="mb-2">
-                  <div class="flex items-center">
-                    <span class="w-32">${skill}</span>
-                      <div class="w-full h-4 bg-gray-600 rounded">
-                      <div class="w-60 bg-blue-100 h-4"></div>
+              .map((skill) => {
+                const skillParts = skill.split(":");
+                const skillName = skillParts[0];
+                const skillLevel = parseInt(skillParts[1], 10) || 55; // Fallback to 50 if parsing fails
+                return `
+                  <div class="mb-2">
+                    <div class="flex items-center justify-between">
+                      <span class="w-32 font-semibold">${skillName}</span>
+                      <span class="text-sm text-gray-600">${skillLevel}%</span>
                     </div>
-                  </div>
-                </li>`
-              )
+                    <div class="w-full h-2 bg-gray-300 rounded">
+                      <div class="bg-${theme}-400 h-2 rounded" style="width: ${skillLevel}%"></div>
+                    </div>
+                  </div>`;
+              })
               .join("")}
-          </ul>
+          </div>
         </section>
       </div>
       </div>
@@ -208,52 +252,52 @@ const FormSection = ({ setOutput, theme }) => {
       <form onSubmit={handleSubmit} className="space-y-4">
         {/* Page Navigation */}
         <div className="flex justify-between mb-4">
-          {page !== 0 && (
-            <button
-              type="button"
-              onClick={() => handlePageChange(page > 0 ? page - 1 : 0)}
-              className="bg-gray-300 text-gray-800 px-4 py-2 rounded-lg hover:bg-gray-400 transition"
-              disabled={loading || page === 0}
+          <button
+            type="button"
+            onClick={() => handlePageChange(page > 0 ? page - 1 : 0)}
+            className={`${
+              page === 0 ? "bg-gray-300" : "bg-gray-400"
+            } text-gray-800 px-4 py-2 rounded-lg hover:bg-gray-400 transition`}
+            disabled={loading || page === 0}
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke-width="1.5"
+              stroke="currentColor"
+              className="size-6"
             >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke-width="1.5"
-                stroke="currentColor"
-                className="size-6"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  d="M9 15 3 9m0 0 6-6M3 9h12a6 6 0 0 1 0 12h-3"
-                />
-              </svg>
-            </button>
-          )}
-          {page !== 3 && (
-            <button
-              type="button"
-              onClick={() => handlePageChange(page < 3 ? page + 1 : 3)}
-              className="bg-gray-300 text-gray-800 px-4 py-2 rounded-lg hover:bg-gray-400 transition"
-              disabled={loading || page === 3}
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M9 15 3 9m0 0 6-6M3 9h12a6 6 0 0 1 0 12h-3"
+              />
+            </svg>
+          </button>
+          <button
+            type="button"
+            onClick={() => handlePageChange(page < 4 ? page + 1 : 4)}
+            className={`${
+              page === 3 ? "bg-gray-200" : "bg-gray-300"
+            } text-gray-800 px-4 py-2 rounded-lg hover:bg-gray-400 transition`}
+            disabled={loading || page === 4}
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke-width="1.5"
+              stroke="currentColor"
+              className="size-6"
             >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke-width="1.5"
-                stroke="currentColor"
-                className="size-6"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  d="m15 15 6-6m0 0-6-6m6 6H9a6 6 0 0 0 0 12h3"
-                />
-              </svg>
-            </button>
-          )}
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="m15 15 6-6m0 0-6-6m6 6H9a6 6 0 0 0 0 12h3"
+              />
+            </svg>
+          </button>
         </div>
 
         {/* Conditional Rendering Based on Page */}
@@ -266,77 +310,38 @@ const FormSection = ({ setOutput, theme }) => {
         )}
 
         {page === 1 && (
+          <div>
+            <label htmlFor="summary" className="text-gray-800 text-xl font-bold">Summary</label>
+            <textarea
+              id="summary"
+              name="summary"
+              rows="4"
+              maxLength={200}
+              placeholder="Enter Your Summary"
+              value={resumeData.summary}
+              onChange={handleChange}
+              className="block w-full p-1 h-56 border border-gray-300 rounded-md overflow-hidden shadow-sm mt-2 resize-none"
+              disabled={loading}
+              required
+            />
+            <button className="bg-blue-600 p-2 mt-2 text-white font-semibold rounded">Improve from AI</button>
+          </div>
+        )}
+        {page === 2 && (
           <WorkExperienceSection
             data={resumeData.workExperience}
             onChange={handleAddExperience}
             disabled={loading}
           />
         )}
-
-        {page === 2 && (
-          <div>
-            <h3 className="text-lg font-medium text-gray-700 mb-2">
-              Education
-            </h3>
-            {resumeData.education.map((edu, index) => (
-              <div key={edu.id} className="mb-4">
-                <h1 className="my-2 font-semibold">
-                  Education Details {index + 1}
-                </h1>
-                <label className="block text-sm font-medium text-gray-700">
-                  Degree
-                </label>
-                <input
-                  type="text"
-                  value={edu.Degree}
-                  onChange={(e) =>
-                    handleEducationChange(edu.id, "Degree", e.target.value)
-                  }
-                  className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
-                  disabled={loading}
-                />
-                <label className="block text-sm font-medium text-gray-700 mt-2">
-                  Institute
-                </label>
-                <input
-                  type="text"
-                  value={edu.Institute}
-                  onChange={(e) =>
-                    handleEducationChange(edu.id, "Institute", e.target.value)
-                  }
-                  className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
-                  disabled={loading}
-                />
-                <label className="block text-sm font-medium text-gray-700 mt-2">
-                  Year
-                </label>
-                <input
-                  type="text"
-                  value={edu.Year}
-                  onChange={(e) =>
-                    handleEducationChange(edu.id, "Year", e.target.value)
-                  }
-                  className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
-                  disabled={loading}
-                />
-                <label className="block text-sm font-medium text-gray-700 mt-2">
-                  CGPA
-                </label>
-                <input
-                  type="text"
-                  value={edu.CGPA}
-                  onChange={(e) =>
-                    handleEducationChange(edu.id, "CGPA", e.target.value)
-                  }
-                  className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
-                  disabled={loading}
-                />
-              </div>
-            ))}
-          </div>
-        )}
-
         {page === 3 && (
+          <EducationComponents
+            data={resumeData.education}
+            onChange={handleEducationChange}
+            disabled={loading}
+          />
+        )}
+        {page === 4 && (
           <div>
             <SkillsAddSection
               disabled={loading}
@@ -347,10 +352,10 @@ const FormSection = ({ setOutput, theme }) => {
         )}
 
         {/* Submit Button */}
-        {page === 3 && (
+        {page === 4 && (
           <button
             type="submit"
-            className="bg-blue-600 text-white p-2 rounded-lg hover:bg-blue-700 transition duration-300 ease-in-out w-full"
+            className="bg-blue-600 p-2 mt-2 text-white font-semibold rounded transition duration-300 ease-in-out w-52 hover:bg-blue-900"
             disabled={loading}
           >
             {loading ? "Generating..." : "Generate Resume"}

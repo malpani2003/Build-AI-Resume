@@ -77,7 +77,7 @@ function WorkExperienceSection({ data, onChange, disabled }) {
       <button
         type="button"
         onClick={handleSubmitBtn}
-        className="mt-2 px-4 py-2 bg-amber-500 text-white rounded"
+        className="mt-2 px-4 py-2 bg-blue-600 p-2 text-white font-semibold rounded"
         disabled={disabled}
       >
         Add New Experience
