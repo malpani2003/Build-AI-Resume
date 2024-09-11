@@ -3,6 +3,9 @@ import SkillsAddSection from "./skillsAddSection";
 import PersonalDetailsSection from "./PersonalDetails";
 import WorkExperienceSection from "./WorkExprienceSection"; // Renamed for consistency
 import EducationComponents from "./EducationComponents";
+import Templates1 from "../Templates/template1";
+// import Templates2 from "../Templates/Templates2";
+import TemplatesForImage from "../Templates/Templates2";
 
 const initialResumeData = {
   name: "John Doe",
@@ -74,7 +77,7 @@ const initialResumeData = {
   interests: ["Open Source Contributions", "Blockchain", "AI/ML", "Traveling"],
 };
 
-const FormSection = ({ setOutput, theme }) => {
+const FormSection = ({ setOutput, theme,template }) => {
   const [page, setPage] = useState(0);
   const [resumeData, setResumeData] = useState(initialResumeData);
   const [loading, setLoading] = useState(false);
@@ -96,17 +99,17 @@ const FormSection = ({ setOutput, theme }) => {
         console.error("Error fetching resume data:", error);
       }
     };
-
+    console.log(theme,template);
     loadData();
   }, []);
 
   useEffect(() => {
     updateOutput();
-  }, [theme, resumeData]);
+  }, [theme, resumeData,template]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    console.log(name,value);
+    console.log(name, value);
     setResumeData((prevData) => ({ ...prevData, [name]: value }));
   };
 
@@ -136,104 +139,20 @@ const FormSection = ({ setOutput, theme }) => {
     }));
   };
   const updateOutput = () => {
-    console.log(theme);
-    const generatedResume = `
-      <div>
-      <div class="bg-${theme}-500 h-3 max-w-3xl"></div>
-      <div class="flex flex-col bg-gray-100 shadow-lg max-w-2xl mx-auto p-4">
-        <section class="text-center mb-3">
-          <p class="text-4xl font-bold text-gray-800 mb-2">${
-            resumeData.name
-          }</p>
-          <p class="text-xl text-gray-600">${resumeData.title}</p>
-          <div class="flex justify-center space-x-4">
-            <p class="text-gray-700">Email: <a href="mailto:${
-              resumeData.email
-            }" class="text-blue-600">${resumeData.email}</a></p>
-            <p class="text-gray-700">Phone: ${resumeData.phone}</p>
-          </div>
-          <p class="text-gray-700">Address: ${resumeData.address}</p>
-          <p class="text-lg text-gray-600">
-            <a href="${
-              resumeData.linkedlnURL
-            }" class="text-blue-600" target="_blank" rel="noopener noreferrer">LinkedIn</a> |
-            <a href="${
-              resumeData.giturl
-            }" class="text-blue-600" target="_blank" rel="noopener noreferrer">GitHub</a> |
-            <a href="${
-              resumeData.portfolio
-            }" class="text-blue-600" target="_blank" rel="noopener noreferrer">Portfolio</a>
-          </p>
-        </section>
-  
-        <section class="mb-4">
-          <h2 class="text-2xl font-semibold text-${theme}-500 mb-2">Summary</h2>
-          <p class="text-gray-700 overflow-x break-all">${resumeData.summary}</p>
-        </section>
-      
-        <section class="mb-4">
-          <h2 class="text-2xl font-semibold text-${theme}-500 mb-2">Education</h2>
-          <table class="min-w-full bg-white">
-            <thead>
-              <tr class="w-full bg-gray-200">
-                <th class="py-2 text-center">Year</th>
-                <th class="py-2 text-center">Degree/Certificate</th>
-                <th class="py-2 text-center">Institute</th>
-                <th class="py-2 text-center">CGPA/%</th>
-              </tr>
-            </thead>
-            <tbody>
-              ${resumeData.education
-                .map(
-                  (edu) => `
-                    <tr>
-                      <td class="py-2 text-center">${edu.Year}</td>
-                      <td class="py-2 text-center">${edu.Degree}</td>
-                      <td class="py-2 text-center">${edu.Institute}</td>
-                      <td class="py-2 text-center">${edu.CGPA}</td>
-                    </tr>`
-                )
-                .join("")}
-            </tbody>
-          </table>
-        </section>
-  
-        <section class="mb-4">
-          <h2 class="text-2xl font-semibold text-${theme}-500 mb-2">Work Experience</h2>
-          <ul class="list-disc pl-5 text-gray-700">
-            ${resumeData.workExperience
-              .map((exp, index) => `<li key=${index}>${exp}</li>`)
-              .join("")}
-          </ul>
-        </section>
-      
-        <section class="mb-4">
-          <h2 class="text-2xl font-semibold text-${theme}-500 mb-2">Skills</h2>
-          <div class="grid grid-cols-3 gap-3">
-            ${resumeData.skills
-              .map((skill) => {
-                const skillParts = skill.split(":");
-                const skillName = skillParts[0];
-                const skillLevel = parseInt(skillParts[1], 10) || 55; // Fallback to 50 if parsing fails
-                return `
-                  <div class="mb-2">
-                    <div class="flex items-center justify-between">
-                      <span class="w-32 font-semibold">${skillName}</span>
-                      <span class="text-sm text-gray-600">${skillLevel}%</span>
-                    </div>
-                    <div class="w-full h-2 bg-gray-300 rounded">
-                      <div class="bg-${theme}-400 h-2 rounded" style="width: ${skillLevel}%"></div>
-                    </div>
-                  </div>`;
-              })
-              .join("")}
-          </div>
-        </section>
-      </div>
-      </div>
-    `;
+    let generatedResume;
+    switch (parseInt(template)) {
+      case 1:
+        generatedResume = Templates1(theme, resumeData);
+        break;
+      case 2:
+        generatedResume = TemplatesForImage(theme, resumeData);
+        break;
+      default:
+        generatedResume = TemplatesForImage(theme, resumeData);
+    }
     setOutput(generatedResume);
   };
+  
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -311,7 +230,12 @@ const FormSection = ({ setOutput, theme }) => {
 
         {page === 1 && (
           <div>
-            <label htmlFor="summary" className="text-gray-800 text-xl font-bold">Summary</label>
+            <label
+              htmlFor="summary"
+              className="text-gray-800 text-xl font-bold"
+            >
+              Summary
+            </label>
             <textarea
               id="summary"
               name="summary"
@@ -324,7 +248,9 @@ const FormSection = ({ setOutput, theme }) => {
               disabled={loading}
               required
             />
-            <button className="bg-blue-600 p-2 mt-2 text-white font-semibold rounded">Improve from AI</button>
+            <button className="bg-blue-600 p-2 mt-2 text-white font-semibold rounded">
+              Improve from AI
+            </button>
           </div>
         )}
         {page === 2 && (

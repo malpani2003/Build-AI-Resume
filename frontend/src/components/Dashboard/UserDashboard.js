@@ -1,10 +1,10 @@
-import React, { useState, useRef } from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 function UserDashboard() {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [loading, setLoading] = useState(null);
-  const navigate=useNavigate();
+  const navigate = useNavigate();
 
   const handleFormSubmit = (event) => {
     event.preventDefault();
@@ -12,7 +12,7 @@ function UserDashboard() {
     setTimeout(() => {
       setLoading(false);
       setIsDialogOpen(false);
-      navigate("/dashboard/resume/123/edit");
+      navigate("/resume/template/123");
     }, 2000);
   };
 
@@ -50,9 +50,10 @@ function UserDashboard() {
         </div>
       </div>
 
+      {/* Responsive Modal */}
       {isDialogOpen && (
-        <div className="fixed bg-opacity-50 bg-gray-700 flex justify-center items-center inset-0">
-          <div className="bg-white shadow-md rounded px-8 pt-6 pb-5 mb-3">
+        <div className="fixed inset-0 bg-gray-700 bg-opacity-50 flex justify-center items-center z-50">
+          <div className="bg-white shadow-md rounded px-8 pt-6 pb-5 mb-3 w-full max-w-sm mx-4 sm:mx-6 md:max-w-md lg:max-w-lg">
             <form onSubmit={handleFormSubmit}>
               <label className="text-gray-700 font-semibold text-xl mb-1">
                 Resume Title

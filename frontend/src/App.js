@@ -10,6 +10,7 @@ import EmailList from "./components/EmailList";
 import { Route, Routes } from "react-router-dom";
 import UserDashboard from "./components/Dashboard/UserDashboard";
 import ResumeEdit from "./components/Resume/ResumeEdit";
+import ChooseTemplate from "./components/Templates/ChooseTemplate";
 function App() {
   const [showLoginModel, setLoginModel] = useState(false);
   return (
@@ -45,9 +46,11 @@ function App() {
 
         <Route
           exact
-          path="/dashboard/resume/:resumeId/edit"
+          path="/resume/:resumeId/template/:templateId/edit"
           element={<ResumeEdit></ResumeEdit>}
         ></Route>
+
+        <Route exact path="/resume/template/:resumeId" element={<ChooseTemplate></ChooseTemplate>}></Route>
         <Route path="*" element={<div>404 - Page Not Found</div>} />
       </Routes>
       <Footer></Footer>
